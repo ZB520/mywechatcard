@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加载中...</title>
+    <style>
+        body { margin: 0; padding: 0; font-family: sans-serif; background: #f0f0f0; text-align: center; }
+        /* 微信抓取图片规则：通常抓取页面第一张大图 */
+        .hidden-img { position: absolute; top: -9999px; width: 400px; height: 400px; opacity: 0; }
+        
+        .card-preview {
+            background: white; margin: 20px; padding: 20px; border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 50px;
+        }
+        .cover { width: 100%; max-width: 300px; height: auto; border-radius: 8px; margin-bottom: 15px; }
+        h1 { font-size: 18px; color: #333; margin-bottom: 10px; }
+        p { font-size: 14px; color: #888; margin-bottom: 20px; }
+        .btn {
+            display: inline-block; width: 80%; padding: 12px;
+            background: #07c160; color: white; text-decoration: none;
+            border-radius: 25px; font-weight: bold;
+        }
+        .loading { font-size: 12px; color: #999; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <!-- 这一张图是专门给微信爬虫看的 -->
+    <img id="shareImg" src="" class="hidden-img">
+
+    <div class="card-preview">
+        <img id="viewImg" src="" class="cover">
+        <h1 id="viewTitle"></h1>
+        <p id="viewDesc"></p>
+        <a id="btnLink" href="#" class="btn">点击查看详情</a>
+        <div class="loading">即将跳转...</div>
+    </div>
+
+    <script>
+        // 解析 URL 参数
+        const params = new URLSearchParams(window.location.search);
+        const target = params.get('t');
+        const title = params.get('title');
+        const desc = params.get('d');
+        const img = params.get('img');
+
+        // 设置页面内容
+        if(title) {
+            document.title = title; // 修改网页标题
+            document.getElementById('viewTitle').innerText = title;
+        }
+        if(desc) document.getElementById('viewDesc').innerText = desc;
+        if(img) {
+            document.getElementById('shareImg').src = img;
+            document.getElementById('viewImg').src = img;
+        }
+        if(target) {
+            document.getElementById('btnLink').href = target;
+        }
+
+        // 自动跳转逻辑 (可选，为了体验好可以保留)
+        // 延时1.5秒让用户看一眼卡片，然后跳转
+        setTimeout(() => {
+            if(target) window.location.href = target;
+        }, 1500);
+    </script>
+</body>
+</html>

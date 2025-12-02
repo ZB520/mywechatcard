@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信卡片链接生成器 (GitHub版)</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; background: #f5f5f5; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; color: #555; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; background: #07c160; color: white; padding: 15px; border: none; border-radius: 5px; font-size: 16px; margin-top: 20px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #06ad56; }
+        .result { margin-top: 20px; display: none; background: #eef9f2; padding: 15px; border-radius: 5px; border: 1px solid #cce5d5; }
+        .result a { word-break: break-all; color: #07c160; }
+        .tips { font-size: 12px; color: #666; margin-top: 20px; line-height: 1.6; background: #fff8e1; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔗 微信卡片生成器</h2>
+        
+        <label>目标链接 (别人点击后要去哪里)</label>
+        <input type="text" id="target" placeholder="https://..." value="https://www.bilibili.com">
+
+        <label>卡片标题</label>
+        <input type="text" id="title" placeholder="例如：限时福利" value="给你分享一个好东西">
+
+        <label>卡片描述 (摘要)</label>
+        <input type="text" id="desc" placeholder="例如：点击查看详情" value="点击立即查看详情">
+
+        <label>封面图片链接 (必须是https)</label>
+        <input type="text" id="img" placeholder="图片地址" value="https://cdn.jsdelivr.net/gh/github/explore/topics/github/github.png">
+
+        <button onclick="createLink()">生成分享链接</button>
+
+        <div class="result" id="resultBox">
+            <p>✅ 复制下方链接：</p>
+            <a href="#" id="finalLink" target="_blank">生成中...</a>
+        </div>
+
+        <div class="tips">
+            <strong>使用必读：</strong><br>
+            1. 由于没有服务器，直接转发此链接可能仍是蓝字。<br>
+            2. <strong>必杀技：</strong>在微信打开生成的链接 -> 点击右上角"..." -> <strong>收藏</strong> -> 去"我的收藏"找到它 -> 转发给朋友。<br>
+            3. 这样发出去的绝对是卡片！
+        </div>
+    </div>
+
+    <script>
+        function createLink() {
+            const target = document.getElementById('target').value.trim();
+            const title = document.getElementById('title').value.trim();
+            const desc = document.getElementById('desc').value.trim();
+            const img = document.getElementById('img').value.trim();
+
+            if(!target || !title) { alert('链接和标题必填'); return; }
+
+            // 获取当前路径，指向 card.html
+            // 假设 index.html 和 card.html 在同一目录下
+            let path = window.location.href;
+            path = path.substring(0, path.lastIndexOf('/')) + '/card.html';
+
+            // 简单的参数拼接
+            const finalUrl = `${path}?t=${encodeURIComponent(target)}&title=${encodeURIComponent(title)}&d=${encodeURIComponent(desc)}&img=${encodeURIComponent(img)}`;
+
+            const box = document.getElementById('resultBox');
+            const link = document.getElementById('finalLink');
+            
+            box.style.display = 'block';
+            link.href = finalUrl;
+            link.innerText = finalUrl;
+        }
+    </script>
+</body>
+</html>
